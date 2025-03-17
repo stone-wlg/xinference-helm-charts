@@ -81,6 +81,7 @@ xinferenceSupervisor:
       requests:
         cpu: "1"
         memory: 4Gi
+    nodeSelector: {}
 xinferenceWorker:
   strategy:
     type: Recreate
@@ -102,3 +103,4 @@ xinferenceWorker:
       requests:
         cpu: "2"
         memory: 8Gi
+    nodeSelector: {}
