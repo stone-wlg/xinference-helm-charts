@@ -4,7 +4,6 @@ config:
   curl_image: curlimages/curl:8.8.0
   image_pull_policy: ""
   worker_num: 1
-  gpu_per_worker: ""
   model_src: "huggingface"
   persistence:
     enabled: false

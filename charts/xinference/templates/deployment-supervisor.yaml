@@ -101,10 +101,16 @@ spec:
         volumeMounts:
           - mountPath: {{ .Values.config.persistence.mountPath }}
             name: xinference-home
+          - name: xinference-auth
+            mountPath: /etc/xinference/auth-config.json
+            subPath: auth-config.json          
       volumes:
         - name: xinference-home
           persistentVolumeClaim:
             claimName: xinference-shared-volume-claim
+        - name: xinference-auth
+          configMap:
+            name: xinference-auth
 {{- end }}
       nodeSelector: {{- toYaml .Values.xinferenceSupervisor.supervisor.nodeSelector | nindent 8 }}
 ---

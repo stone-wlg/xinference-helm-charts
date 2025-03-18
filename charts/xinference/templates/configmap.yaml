@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xinference-auth
+  labels:
+    app: xinference-auth
+data:
+  auth-config.json: |
+    {
+        "auth_config": {
+            "algorithm": "HS256",
+            "secret_key": "589bb1092b6831b87a068f1a45868c80c1752f1c0b4714f0ad3dcb2f3b8d42b9",
+            "token_expire_in_minutes": 180
+        },
+        "user_config": [
+            {
+                "username": "admin",
+                "password": "admin@123",
+                "permissions": [
+                    "admin"
+                ],
+                "api_keys": [
+                    "sk-72tkvudyGLPMi",
+                    "sk-ZOTLIY4gt9w11"
+                ]
+            }
+        ]
+    }
