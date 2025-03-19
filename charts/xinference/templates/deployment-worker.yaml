@@ -63,11 +63,17 @@ spec:
 {{- if .Values.config.persistence.enabled }}
         volumeMounts:
           - mountPath: {{ .Values.config.persistence.mountPath }}
-            name: xinference-home              
+            name: xinference-home
+          - name: dshm  
+            mountPath: /dev/shm         
       volumes:
         - name: xinference-home
           persistentVolumeClaim:
-            claimName: xinference-shared-volume-claim        
+            claimName: {{ .Release.Namespace }}-shared-volume-claim
+        - name: dshm
+          emptyDir:
+            sizeLimit: '32Gi'
+            medium: Memory                  
 {{- end }}
       nodeSelector: {{- toYaml .Values.xinferenceWorker.worker.nodeSelector | nindent 8 }}
 ---
