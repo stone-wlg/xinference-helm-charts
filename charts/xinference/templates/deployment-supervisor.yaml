@@ -37,26 +37,20 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-{{- if .Values.config.persistence.enabled }}
         - name: XINFERENCE_HOME
           value: {{ .Values.config.persistence.mountPath }}
-{{- end }}
 {{- range $key, $value := .Values.config.extra_envs }}
         - name: {{ $key }}
           value: {{ $value }}
 {{- end }}
-{{- if .Values.config.xinference_image }}
         image: {{ .Values.config.xinference_image | quote }}
-{{- else }}
-        image: "xprobe/xinference:{{ .Chart.AppVersion }}"
-{{- end }}
         imagePullPolicy: {{ .Values.config.image_pull_policy }}
         name: supervisor
         ports: {{- toYaml .Values.xinferenceSupervisor.supervisor.ports | nindent 10 }}
         resources: {{- toYaml .Values.xinferenceSupervisor.supervisor.resources | nindent 10 }}
         volumeMounts:
           - name: xinference-data
-            mountPath: /data
+            mountPath: {{ .Values.config.persistence.mountPath }}
           - name: xinference-auth
             mountPath: /etc/xinference/auth-config.json
             subPath: auth-config.json

@@ -1,40 +1,16 @@
 # common used configurations
 config:
-  xinference_image: ""
+  xinference_image: "xprobe/xinference:latest"
   curl_image: curlimages/curl:8.8.0
-  image_pull_policy: ""
+  image_pull_policy: "IfNotPresent"
   worker_num: 1
-  model_src: "huggingface"
+  model_src: "modelscope"
   persistence:
-    enabled: false
     mountPath: "/data"
   # any other environments
   extra_envs: {}
-storageClass:
-  name: local-storage
-  spec:
-    # place your configs here for the storage class
-    provisioner: kubernetes.io/no-provisioner
-    volumeBindingMode: WaitForFirstConsumer
-pv:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    # actually no limit for local-storage.
-    # if you want to change this, your storage class should support `resize`
-    storage: 20Gi
-  hostPath:
-    path: /tmp/xinference
-  persistentVolumeReclaimPolicy: Delete
-  storageClassName: "local-storage"
-pvc:
-  accessModes:
-    # the volume can be mounted as read-write by many nodes.
-    - ReadWriteMany
-  sharedVolumeClaim:
-    storageRequest: 10Gi
-  storageClassName: "local-storage"
-  volumeMode: ""
+  username: "admin"
+  password: "admin"  
 serviceWeb:
   ports:
   - nodePort: 30003

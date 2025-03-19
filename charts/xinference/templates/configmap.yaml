@@ -14,8 +14,8 @@ data:
         },
         "user_config": [
             {
-                "username": "admin",
-                "password": "admin@123",
+                "username": "{{ .Values.config.username }}",
+                "password": "{{ .Values.config.password }}",
                 "permissions": [
                     "admin"
                 ],

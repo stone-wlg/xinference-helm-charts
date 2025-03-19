@@ -37,10 +37,8 @@ spec:
               fieldPath: status.podIP
         - name: XINFERENCE_MODEL_SRC
           value: {{ .Values.config.model_src }}
-{{- if .Values.config.persistence.enabled }}
         - name: XINFERENCE_HOME
           value: {{ .Values.config.persistence.mountPath }}
-{{- end }}
 {{- range $key, $value := .Values.config.extra_envs }}
         - name: {{ $key }}
           value: {{ $value }}
@@ -49,32 +47,24 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-{{- if .Values.config.xinference_image }}
         image: {{ .Values.config.xinference_image | quote }}
-{{- else }}
-        image: "xprobe/xinference:{{ .Chart.AppVersion }}"
-{{- end }}
-{{- if .Values.config.image_pull_policy }}
         imagePullPolicy: {{ .Values.config.image_pull_policy }}
-{{- end }}
         name: worker
         ports: {{- toYaml .Values.xinferenceWorker.worker.ports | nindent 10 }}
         resources: {{- toYaml .Values.xinferenceWorker.worker.resources | nindent 10 }}
-{{- if .Values.config.persistence.enabled }}
         volumeMounts:
-          - mountPath: {{ .Values.config.persistence.mountPath }}
-            name: xinference-home
+          - name: xinference-data
+            mountPath: {{ .Values.config.persistence.mountPath }}
           - name: dshm  
             mountPath: /dev/shm         
       volumes:
-        - name: xinference-home
-          persistentVolumeClaim:
-            claimName: {{ .Release.Namespace }}-shared-volume-claim
+        - name: xinference-data
+          hostPath:
+            path: /mnt/data
         - name: dshm
           emptyDir:
             sizeLimit: '32Gi'
             medium: Memory                  
-{{- end }}
       nodeSelector: {{- toYaml .Values.xinferenceWorker.worker.nodeSelector | nindent 8 }}
 ---
 apiVersion: v1
