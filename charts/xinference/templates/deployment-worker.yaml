@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "charts.fullname" . }}-worker
+  name: xinference-worker
   labels:
   {{- include "charts.labels" . | nindent 4 }}
 spec:
@@ -27,9 +27,9 @@ spec:
         image: {{ .Values.config.curl_image | quote }}
         command: {{- toYaml .Values.xinferenceWorker.worker.initContainers.command | nindent 8 }}
       containers:
-      - args: {{- toYaml .Values.xinferenceWorker.worker.args | nindent 8 }}
-        command:
+      - command:
         - xinference-worker
+        args: {{- toYaml .Values.xinferenceWorker.worker.args | nindent 8 }}
         env:
         - name: POD_IP
           valueFrom:
@@ -65,7 +65,7 @@ spec:
           emptyDir:
             sizeLimit: '32Gi'
             medium: Memory                  
-      nodeSelector: {{- toYaml .Values.xinferenceWorker.worker.nodeSelector | nindent 8 }}
+      affinity: {{- toYaml .Values.xinferenceWorker.worker.affinity | nindent 8 }}    
 ---
 apiVersion: v1
 kind: Service

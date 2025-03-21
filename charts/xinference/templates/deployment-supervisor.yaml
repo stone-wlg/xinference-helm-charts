@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "charts.fullname" . }}-supervisor
+  name: xinference-supervisor
   labels:
   {{- include "charts.labels" . | nindent 4 }}
 spec:
@@ -21,13 +21,9 @@ spec:
         {{- toYaml .Values.config.imagePullSecrets | nindent 8 }}
       {{- end }}
       containers:
-      - args: {{- toYaml .Values.xinferenceSupervisor.supervisor.args | nindent 8 }}
-        command:
-          {{- if .Values.xinferenceSupervisor.supervisor.command }}
-          {{- toYaml .Values.xinferenceSupervisor.supervisor.command | nindent 10 }}
-          {{- else }}
-          - "xinference-supervisor"
-          {{- end }}
+      - command:
+        - "xinference-supervisor"
+        args: {{- toYaml .Values.xinferenceSupervisor.supervisor.args | nindent 8 }}
         env:
         - name: POD_IP
           valueFrom:
@@ -61,7 +57,7 @@ spec:
         - name: xinference-auth
           configMap:
             name: xinference-auth
-      nodeSelector: {{- toYaml .Values.xinferenceSupervisor.supervisor.nodeSelector | nindent 8 }}
+      affinity: {{- toYaml .Values.xinferenceSupervisor.supervisor.affinity | nindent 8 }}
 ---
 apiVersion: v1
 kind: Service
