@@ -33,8 +33,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        - name: XINFERENCE_DISABLE_METRICS
+          value: "1"              
         - name: XINFERENCE_HOME
-          value: {{ .Values.config.persistence.mountPath }}
+          value: "{{ .Values.config.persistence.mountPath }}"
 {{- range $key, $value := .Values.config.extra_envs }}
         - name: {{ $key }}
           value: {{ $value }}
